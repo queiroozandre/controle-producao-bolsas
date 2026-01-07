@@ -47,7 +47,8 @@ init_db()
 # ---------------- ROTAS ----------------
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return "APP ONLINE - CONTROLE DE PRODUÇÃO"
+
 
 
 @app.route("/material", methods=["GET", "POST"])
