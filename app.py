@@ -9,6 +9,7 @@ app = Flask(__name__)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database.db")
 
+init_db()
 
 # ---------------- DATABASE ----------------
 def get_db():
@@ -39,12 +40,6 @@ def init_db():
                 data TEXT
             )
         """)
-
-
-@app.before_first_request
-def setup():
-    init_db()
-
 
 # ---------------- ROTAS ----------------
 @app.route("/")
