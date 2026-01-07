@@ -1,1 +1,77 @@
-<APP_PY_CONTENT_PLACEHOLDER>
+from flask import Flask, render_template, request, redirect, url_for, send_file
+import sqlite3
+from datetime import datetime
+import os
+from openpyxl import Workbook
+
+app = Flask(__name__)
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "database.db")
+
+
+# ---------------- DATABASE ----------------
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    with get_db() as db:
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS materiais (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                material TEXT,
+                cor TEXT,
+                data TEXT
+            )
+        """)
+
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS producao (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                pedido TEXT,
+                modelo TEXT,
+                cor TEXT,
+                quantidade INTEGER,
+                etapa TEXT,
+                data TEXT
+            )
+        """)
+
+
+@app.before_first_request
+def setup():
+    init_db()
+
+
+# ---------------- ROTAS ----------------
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/material", methods=["GET", "POST"])
+def material():
+    db = get_db()
+
+    if request.method == "POST":
+        material = request.form["material"]
+        cor = request.form["cor"]
+
+        db.execute(
+            "INSERT INTO materiais (material, cor, data) VALUES (?, ?, ?)",
+            (material, cor, datetime.now())
+        )
+        db.commit()
+        return redirect(url_for("material"))
+
+    materiais = db.execute(
+        "SELECT * FROM materiais ORDER BY id DESC"
+    ).fetchall()
+
+    return render_template("materials.html", materiais=materiais)
+
+
+@app.route("/produc
