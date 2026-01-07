@@ -1,1 +1,46 @@
-<BASE_HTML_PLACEHOLDER>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Produção</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: #f4f4f4;
+        }
+        nav a {
+            margin-right: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 16px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/">Início</a>
+    <a href="/material">Material</a>
+    <a href="/producao/corte">Corte</a>
+    <a href="/producao/costura-entrada">Costura</a>
+    <a href="/producao/costura-saida">Prontos</a>
+    <a href="/relatorio">Relatórios</a>
+</nav>
+
+<hr>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
